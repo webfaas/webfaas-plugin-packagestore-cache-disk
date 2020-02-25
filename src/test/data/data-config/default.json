@@ -1,0 +1,12 @@
+{
+    "core":{
+        "log":{
+            "level":"INFO"
+        }
+    },
+    "registry":{
+        "cache": {
+            "base": "folder2"
+        }
+    }
+}
