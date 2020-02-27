@@ -24,8 +24,8 @@ describe("Plugin", () => {
         let core2 = new Core();
         let plugin2 = new WebFassPlugin(core2);
         core2.getLog().changeCurrentLevel(LogLevelEnum.OFF);
-        chai.expect(core2.getModuleManager().getPackageStoreManager().getCache()).to.not.null;
-        let cache: PackageStoreCache = <PackageStoreCache> core2.getModuleManager().getPackageStoreManager().getCache();
+        chai.expect(core2.getModuleManager().getModuleManagerImport().getPackageStoreManager().getCache()).to.not.null;
+        let cache: PackageStoreCache = <PackageStoreCache> core2.getModuleManager().getModuleManagerImport().getPackageStoreManager().getCache();
         chai.expect(cache.getConfig().base).to.eq("folder2");
     })
 })

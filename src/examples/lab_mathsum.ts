@@ -23,11 +23,10 @@ const packageRegistry1 = new PackageRegistryMock.PackageRegistry1();
 const core = new Core();
 const packageStoreCache = new PackageStoreCache();
 packageStoreCache.getConfig().base = folderCache;
-core.getModuleManager().getPackageStoreManager().setCache(packageStoreCache);
-core.getModuleManager().getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
+core.getModuleManager().getModuleManagerImport().getPackageStoreManager().setCache(packageStoreCache);
+core.getModuleManager().getModuleManagerImport().getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
 
-//core.getModuleManager().import("@registry1/mathsum", "0.0.1", undefined, "registry1").then((moduleObj: any)=>{
-core.getModuleManager().import("@registry1/mathsum", "0", undefined, "registry1").then((moduleObj: any)=>{
+core.import("@registry1/mathsum", "0", undefined, "registry1").then((moduleObj: any)=>{
     if (moduleObj){
         console.log("module loaded", moduleObj);
         console.log("2 = 3 => ", moduleObj(2,3));

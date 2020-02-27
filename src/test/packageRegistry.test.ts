@@ -49,10 +49,10 @@ describe("Package Store Cache - getPackage", () => {
         const moduleManager = core.getModuleManager();
         
         packageStoreCache.getConfig().base = folderCache;
-        moduleManager.getPackageStoreManager().setCache(packageStoreCache);
-        moduleManager.getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
+        moduleManager.getModuleManagerImport().getPackageStoreManager().setCache(packageStoreCache);
+        moduleManager.getModuleManagerImport().getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
 
-        let moduleObj: any = await moduleManager.import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
+        let moduleObj: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
         chai.expect(moduleObj).to.not.null;
         chai.expect(moduleObj(2,3)).to.eq(5);
 
@@ -65,16 +65,16 @@ describe("Package Store Cache - getPackage", () => {
             });
         }
 
-        moduleManager.cleanCacheObjectCompiled();
-        let moduleObj2: any = await moduleManager.import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
+        moduleManager.getModuleManagerCache().cleanCacheModule();
+        let moduleObj2: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
         chai.expect(moduleObj2).to.not.null;
         chai.expect(moduleObj2(2,3)).to.eq(5);
         
         fs.unlinkSync(path.join(folderCache, "registry1-mathsum-0.0.1.tar"));
         fs.rmdirSync(folderCache);
 
-        moduleManager.cleanCacheObjectCompiled();
-        let moduleObj3: any = await moduleManager.import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
+        moduleManager.getModuleManagerCache().cleanCacheModule();
+        let moduleObj3: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0.0.1", undefined, "registry1", true);
         chai.expect(moduleObj3).to.null;
     })
 
@@ -91,10 +91,10 @@ describe("Package Store Cache - getPackage", () => {
         const moduleManager = core.getModuleManager();
         
         packageStoreCache.getConfig().base = folderCache;
-        moduleManager.getPackageStoreManager().setCache(packageStoreCache);
-        moduleManager.getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
+        moduleManager.getModuleManagerImport().getPackageStoreManager().setCache(packageStoreCache);
+        moduleManager.getModuleManagerImport().getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
 
-        let moduleObj: any = await moduleManager.import("@registry1/mathsum", "0", undefined, "registry1", true);
+        let moduleObj: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0", undefined, "registry1", true);
         chai.expect(moduleObj).to.not.null;
         chai.expect(moduleObj(2,3)).to.eq(5);
 
@@ -107,8 +107,8 @@ describe("Package Store Cache - getPackage", () => {
             });
         }
 
-        moduleManager.cleanCacheObjectCompiled();
-        let moduleObj2: any = await moduleManager.import("@registry1/mathsum", "0", undefined, "registry1", true);
+        moduleManager.getModuleManagerCache().cleanCacheModule();
+        let moduleObj2: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0", undefined, "registry1", true);
         chai.expect(moduleObj2).to.not.null;
         chai.expect(moduleObj2(2,3)).to.eq(5);
         
@@ -116,8 +116,8 @@ describe("Package Store Cache - getPackage", () => {
         fs.unlinkSync(path.join(folderCache, "registry1-mathsum-0.0.3.tar"));
         fs.rmdirSync(folderCache);
 
-        moduleManager.cleanCacheObjectCompiled();
-        let moduleObj3: any = await moduleManager.import("@registry1/mathsum", "0", undefined, "registry1", true);
+        moduleManager.getModuleManagerCache().cleanCacheModule();
+        let moduleObj3: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0", undefined, "registry1", true);
         chai.expect(moduleObj3).to.null;
     })
 })
