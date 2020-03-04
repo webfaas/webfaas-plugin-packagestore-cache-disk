@@ -1,39 +1,15 @@
 import * as chai from "chai";
-import * as mocha from "mocha";
-
 import * as os from "os";
 import * as fs from "fs";
 import * as path from "path";
 
-import { Log, LogLevelEnum, ClientHTTPConfig, Core, IPackageRegistryResponse } from "@webfaas/webfaas-core";
+import { Log, LogLevelEnum, Core, IPackageRegistryResponse } from "@webfaas/webfaas-core";
 
-import { PackageStoreCacheConfig } from "../lib/PackageStoreCacheConfig";
 import { PackageStoreCache } from "../lib/PackageStoreCache";
 import { PackageRegistryMock } from "./mocks/PackageRegistryMock";
 
 var log = new Log();
 log.changeCurrentLevel(LogLevelEnum.OFF);
-
-/*
-var folderNotPermited = path.join(os.tmpdir(), "notpermited_") + new Date().getTime();
-fs.mkdirSync(folderNotPermited)
-fs.chmodSync(folderNotPermited, "000");
-var packageRegistry_foldernotpermited = new PackageRegistry();
-packageRegistry_foldernotpermited.getConfig().base = folderNotPermited;
-*/
-
-describe("Package Store Cache", () => {
-    it("should return properties", function(){
-        const packageStoreCache_default = new PackageStoreCache();
-        packageStoreCache_default.getConfig().base = path.join("path1");
-        const packageStoreCache_full = new PackageStoreCache(new PackageStoreCacheConfig("path2"), log);
-
-        chai.expect(typeof(packageStoreCache_default.getConfig())).to.eq("object");
-        chai.expect(packageStoreCache_default.getConfig().base).to.eq("path1");
-        chai.expect(typeof(packageStoreCache_full.getConfig())).to.eq("object");
-        chai.expect(packageStoreCache_full.getConfig().base).to.eq("path2");
-    })
-})
 
 describe("Package Store Cache - getPackage", () => {
     it("getPackage - @registry1/mathsum 0.0.1", async function(){
@@ -119,5 +95,39 @@ describe("Package Store Cache - getPackage", () => {
         moduleManager.getModuleManagerCache().cleanCacheModule();
         let moduleObj3: any = await moduleManager.getModuleManagerImport().import("@registry1/mathsum", "0", undefined, "registry1", true);
         chai.expect(moduleObj3).to.null;
+    })
+
+    it("not permit", async function(){
+        var folderNotPermit = path.join(os.tmpdir(), "cache_notpermit_") + new Date().getTime();
+        fs.mkdirSync(folderNotPermit);
+        fs.chmodSync(folderNotPermit, "000");
+        
+        const packageStoreCache_default = new PackageStoreCache();
+        packageStoreCache_default.getConfig().base = path.join(folderNotPermit, "folder1");
+
+        try {
+            await packageStoreCache_default.getPackageStore("@registry1/mathsum", "0.0.1")
+            throw new Error("Sucess");
+        }
+        catch (errTry) {
+            chai.expect( errTry.code ).to.eq("EACCES");
+        }
+    })
+
+    it("simulate error", async function(){
+        const packageStoreCache_default = new PackageStoreCache();
+        packageStoreCache_default.getConfig().base = os.tmpdir();
+
+        packageStoreCache_default.getFileName = function(){
+            throw new Error("simulate error")
+        }
+
+        try {
+            await packageStoreCache_default.getPackageStore("@registry1/mathsum", "0.0.1")
+            throw new Error("Sucess");
+        }
+        catch (errTry) {
+            chai.expect( errTry.message ).to.eq("simulate error");
+        }
     })
 })

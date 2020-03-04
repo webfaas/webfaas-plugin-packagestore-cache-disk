@@ -8,6 +8,7 @@ import { Core, LogLevelEnum } from "@webfaas/webfaas-core";
 
 import WebFassPlugin from "../lib/WebFassPlugin";
 import { PackageStoreCache } from "../lib/PackageStoreCache";
+import { Config } from "@webfaas/webfaas-core/lib/Config/Config";
 
 describe("Plugin", () => {
     it("start and stop - new", async function(){
@@ -20,12 +21,18 @@ describe("Plugin", () => {
         await plugin.stopPlugin(core); //retry stop
 
         //config
-        (<NodeModule> require.main).filename = path.join(__dirname, "./data/-data-config");
-        let core2 = new Core();
+        let configData = {
+            "registry":{
+                "cache": {
+                    "base": "folder2"
+                }
+            }
+        }
+        let core2 = new Core( new Config(configData) );
         let plugin2 = new WebFassPlugin(core2);
         core2.getLog().changeCurrentLevel(LogLevelEnum.OFF);
-        chai.expect(core2.getModuleManager().getModuleManagerImport().getPackageStoreManager().getCache()).to.not.null;
-        let cache: PackageStoreCache = <PackageStoreCache> core2.getModuleManager().getModuleManagerImport().getPackageStoreManager().getCache();
+        chai.expect(core2.getPackageStoreManager().getCache()).to.not.null;
+        let cache: PackageStoreCache = <PackageStoreCache> core2.getPackageStoreManager().getCache();
         chai.expect(cache.getConfig().base).to.eq("folder2");
     })
 })

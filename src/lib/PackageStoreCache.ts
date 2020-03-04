@@ -122,8 +122,6 @@ export class PackageStoreCache implements IPackageStoreCacheAsync {
     putPackageStore(packageStore: PackageStore): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
-                await this.verifyAndCreateFolder();
-                
                 let bufferFile: Buffer | null = null;
                 let filePath = this.getFileName(packageStore.getName(), packageStore.getVersion());
 
@@ -138,6 +136,7 @@ export class PackageStoreCache implements IPackageStoreCacheAsync {
                 }
 
                 if (bufferFile){
+                    await this.verifyAndCreateFolder();
                     fs.writeFile(filePath, bufferFile, function(errWrite){
                         if (errWrite){
                             reject(new WebFaasError.FileError(errWrite));

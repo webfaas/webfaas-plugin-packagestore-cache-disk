@@ -19,6 +19,6 @@ export default class WebFassPlugin implements IPlugin {
             config.base = cacheConfig.base;
         }
         this.cache = new PackageStoreCache(config);
-        core.getModuleManager().getModuleManagerImport().getPackageStoreManager().setCache(this.cache);
+        core.getPackageStoreManager().setCache(this.cache);
     }
 }

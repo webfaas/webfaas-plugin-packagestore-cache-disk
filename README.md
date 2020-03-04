@@ -43,8 +43,8 @@ const packageRegistry1 = new PackageRegistryMock.PackageRegistry1();
 const core = new Core();
 const packageStoreCache = new PackageStoreCache();
 packageStoreCache.getConfig().base = folderCache;
-core.getModuleManager().getModuleManagerImport().getPackageStoreManager().setCache(packageStoreCache);
-core.getModuleManager().getModuleManagerImport().getPackageStoreManager().getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
+core.getPackageStoreManager().setCache(packageStoreCache);
+core.getPackageRegistryManager().addRegistry("registry1", "", packageRegistry1);
 
 core.import("@registry1/mathsum", "0", undefined, "registry1").then((moduleObj: any)=>{
     if (moduleObj){
