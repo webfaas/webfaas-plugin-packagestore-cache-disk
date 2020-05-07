@@ -28,7 +28,10 @@ describe("Plugin", () => {
                 }
             }
         }
-        let core2 = new Core( new Config(configData) );
+        let config = new Config();
+        config.read(configData);
+        let core2 = new Core( config );
+
         let plugin2 = new WebFassPlugin(core2);
         core2.getLog().changeCurrentLevel(LogLevelEnum.OFF);
         chai.expect(core2.getPackageStoreManager().getCache()).to.not.null;
