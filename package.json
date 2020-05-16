@@ -1,6 +1,6 @@
 {
   "name": "@webfaas/webfaas-plugin-packagestore-cache-disk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "WebFaaS Framework - Plugin - Package Store Cache - Disk",
   "main": "lib/index.js",
   "readmeFilename": "README.md",

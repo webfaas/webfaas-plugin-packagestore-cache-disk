@@ -6,11 +6,23 @@ WebFaaS Plugin for [node](http://nodejs.org).
 [![Linux Build][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
+### Config - Simple
+```json
+{
+    "registry.cache.disk": [
+        {
+            "enabled": true
+        }
+    ]
+}
+```
+
 ### Config - Complete
 ```json
 {
-    "registry.cache": [
+    "registry.cache.disk": [
         {
+            "enabled": true,
             "base": "[folder cache]"
         }
     ]
